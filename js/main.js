@@ -7,7 +7,9 @@ function initMap() {
     attribution: 'Map layer &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-  // Colorbrewer2: ten data classes, qualitative, applied to HR_NAME
+  L.control.scale({ position: 'bottomleft' }).addTo(map);
+
+  // Colorbrewer2: ten data classes, qualitative, applied to hr_name
   var cb_hr_name = [
     'rgb(141,211,199)',
     'rgb(255,255,179)',
@@ -21,60 +23,131 @@ function initMap() {
     'rgb(188,128,189)'
   ];
 
-  var activeAJAX = 0;
+  map.on('load dragend zoomend', function (e) {
+    var current = {};
+      current.zoom = map.getZoom();
+      current.bbox = {
+        'sw': {
+          'lng': map.getBounds().getSouthWest().lng,
+          'lat': map.getBounds().getSouthWest().lat
+        },
+        'ne': {
+          'lng': map.getBounds().getNorthEast().lng,
+          'lat': map.getBounds().getNorthEast().lat
+        },
+        'tuple': map.getBounds().getSouthWest().lng.toFixed(2) + ',' +
+          map.getBounds().getSouthWest().lat.toFixed(2) + ',' +
+          map.getBounds().getNorthEast().lng.toFixed(2) + ',' +
+          map.getBounds().getNorthEast().lat.toFixed(2)
+      };
+    console.log(current);
+    getGeoJson(current);
+  });
 
-  // Notes on simplification
-  //  6 -  8: 01.json w/2 decimal places
-  //  9 - 10: 04.json
-  // 11 - 12: 07.json
-  // 13 - 14: 10.json
+  function getGeoJson(current) {
+    var precision, tolerance;
 
-  activeAJAX++;
-  $.ajax({
-    url: 'data/AU_CA.dec.01.json',
-    dataType: 'json',
-    type: 'get'
-  }).done(function (data) {
+    switch(current.zoom) {
+      case  6:
+        precision = 2;
+        tolerance = 0.008;
+        break;
+      case  7:
+        precision = 2;
+        tolerance = 0.0012;
+        break;
+      case  8:
+        precision = 3;
+        tolerance = 0.0018;
+        break;
+      case  9:
+        precision = 3;
+        tolerance = 0.0018;
+        break;
+      case 10:
+        precision = 5;
+        tolerance = 0.0024;
+        break;
+      case 11:
+        precision = 5;
+        // tolerance = 0.0054;
+        break;
+      case 12:
+        precision = 5;
+        //  tolerance = 0.0081;
+        break;
+      case 13:
+        precision = 6;
+        // tolerance = 10000;
+        break;
+      case 14:
+        precision = 6;
+        // tolerance = 10000;
+        break;
+      case 15:
+        precision = 6;
+        // tolerance = 10000;
+        break;
+    }
 
-    console.log(data);
-    l = L.geoJson(data, {
-      style: function(feature) {
-        var fillColor;
-        switch (feature.properties.HR_NAME) {
-          case 'Central Coast':     fillColor = cb_hr_name[0]; break;
-          case 'Colorado River':    fillColor = cb_hr_name[1]; break;
-          case 'North Coast':       fillColor = cb_hr_name[2]; break;
-          case 'North Lahontan':    fillColor = cb_hr_name[3]; break;
-          case 'Sacramento River':  fillColor = cb_hr_name[4]; break;
-          case 'San Francisco Bay': fillColor = cb_hr_name[5]; break;
-          case 'San Joaquin River': fillColor = cb_hr_name[6]; break;
-          case 'South Coast':       fillColor = cb_hr_name[7]; break;
-          case 'South Lahontan':    fillColor = cb_hr_name[8]; break;
-          case 'Tulare Lake':       fillColor = cb_hr_name[9]; break;
+    if (l !== undefined) {
+      console.log('removing l: ', l);
+      map.removeLayer(l);
+      l = null;
+      console.log('removed l: ', l);
+    }
+
+    console.log('make ajax request.');
+    var url = 'http://localhost:3000/hucs?&bbox=' + current.bbox.tuple;
+    if (precision !== undefined) {
+      url += '&precision=' + precision;
+    }
+    if (tolerance !== undefined) {
+      url += '&tolerance=' + tolerance;
+    }
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: 'get'
+    }).done(function (data) {
+
+      console.log(data);
+
+      l = L.geoJson(data, {
+        style: function (feature) {
+          var fillColor;
+          switch (feature.properties.hr_name) {
+            case 'Central Coast':     fillColor = cb_hr_name[0]; break;
+            case 'Colorado River':    fillColor = cb_hr_name[1]; break;
+            case 'North Coast':       fillColor = cb_hr_name[2]; break;
+            case 'North Lahontan':    fillColor = cb_hr_name[3]; break;
+            case 'Sacramento River':  fillColor = cb_hr_name[4]; break;
+            case 'San Francisco Bay': fillColor = cb_hr_name[5]; break;
+            case 'San Joaquin River': fillColor = cb_hr_name[6]; break;
+            case 'South Coast':       fillColor = cb_hr_name[7]; break;
+            case 'South Lahontan':    fillColor = cb_hr_name[8]; break;
+            case 'Tulare Lake':       fillColor = cb_hr_name[9]; break;
+          }
+          return { stroke: true, color: '#111', weight: 1, opacity:0.7, fill: true, fillColor: fillColor, fillOpacity: 0.5 };
+        },
+        onEachFeature: function (feature, layer) {
+          layer.on('mouseover mousemove', function(e) {
+            layer.setStyle({ fillOpacity: 0.9 });
+          });
+
+          layer.on('mouseout', function(e) {
+            l.resetStyle(e.target);
+            map.closePopup();
+          });
+
+          layer.bindPopup(
+            '<b>' + feature.properties.first_hu_1 + '</b><br/>' +
+              '(' + feature.properties.hr_name + ')'
+          );
         }
-        return { stroke: true, color: '#111', weight: 1, opacity:0.7, fill: true, fillColor: fillColor, fillOpacity: 0.5 };
-      },
-      onEachFeature: function (feature, layer) {
-        layer.on('mouseover mousemove', function(e) {
-          layer.setStyle({ fillOpacity: 0.9 });
-        });
+      }).addTo(map);
+      console.log('ajax request processing complete.')
+    })
+  }
 
-        layer.on('mouseout', function(e) {
-          l.resetStyle(e.target);
-          map.closePopup();
-        });
-
-        layer.bindPopup(
-          '<b>' + feature.properties.FIRST_HU_1 + '</b><br/>' +
-            '(' + feature.properties.HR_NAME + ')'
-        );
-      }
-    }).addTo(map);
-
-    map.on('load zoomend', function () {
-      console.log(map.getZoom());
-    });
-
-    if (--activeAJAX == 0) { var foo = 'bar' }
-  })
 }
