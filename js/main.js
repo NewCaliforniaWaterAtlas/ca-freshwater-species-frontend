@@ -90,64 +90,68 @@ function initMap() {
         break;
     }
 
-    if (l !== undefined) {
-      console.log('removing l: ', l);
-      map.removeLayer(l);
-      l = null;
-      console.log('removed l: ', l);
-    }
-
     console.log('make ajax request.');
-    var url = 'http://localhost:3000/hucs?&bbox=' + current.bbox.tuple;
+    var url = 'http://ca-features.statewater.org/hucs?f=topojson&bbox=' + current.bbox.tuple;
     if (precision !== undefined) {
-      url += '&precision=' + precision;
+      url += '&p=' + precision;
     }
     if (tolerance !== undefined) {
-      url += '&tolerance=' + tolerance;
+      url += '&t=' + tolerance;
     }
-    $.ajax({
-      url: url,
-      dataType: 'json',
-      type: 'get'
-    }).done(function (data) {
+    $.getJSON(url).done(addTopoData);
 
-      console.log(data);
-
-      l = L.geoJson(data, {
-        style: function (feature) {
-          var fillColor;
-          switch (feature.properties.hr_name) {
-            case 'Central Coast':     fillColor = cb_hr_name[0]; break;
-            case 'Colorado River':    fillColor = cb_hr_name[1]; break;
-            case 'North Coast':       fillColor = cb_hr_name[2]; break;
-            case 'North Lahontan':    fillColor = cb_hr_name[3]; break;
-            case 'Sacramento River':  fillColor = cb_hr_name[4]; break;
-            case 'San Francisco Bay': fillColor = cb_hr_name[5]; break;
-            case 'San Joaquin River': fillColor = cb_hr_name[6]; break;
-            case 'South Coast':       fillColor = cb_hr_name[7]; break;
-            case 'South Lahontan':    fillColor = cb_hr_name[8]; break;
-            case 'Tulare Lake':       fillColor = cb_hr_name[9]; break;
-          }
-          return { stroke: true, color: '#111', weight: 1, opacity:0.7, fill: true, fillColor: fillColor, fillOpacity: 0.5 };
-        },
-        onEachFeature: function (feature, layer) {
-          layer.on('mouseover mousemove', function(e) {
-            layer.setStyle({ fillOpacity: 0.9 });
-          });
-
-          layer.on('mouseout', function(e) {
-            l.resetStyle(e.target);
-            map.closePopup();
-          });
-
-          layer.bindPopup(
-            '<b>' + feature.properties.first_hu_1 + '</b><br/>' +
-              '(' + feature.properties.hr_name + ')'
-          );
-        }
-      }).addTo(map);
+    function addTopoData(topoData){
       console.log('ajax request processing complete.')
-    })
+      if (l !== undefined) {
+        map.removeLayer(l);
+        l = null;
+      }
+      l = new L.TopoJSON();
+      l.addData(topoData);
+      l.addTo(map);
+      l.eachLayer(handleLayer);
+    }
+
+    function handleLayer(layer){
+      layer.setStyle(style(layer));
+
+      layer.on('mouseover mousemove', function(e) {
+        layer.setStyle({ fillOpacity: 0.9 });
+      });
+
+      layer.on('mouseout', function(e) {
+        layer.setStyle(style(layer));
+        map.closePopup();
+      });
+
+      layer.bindPopup(
+        '<b>' + layer.feature.properties.first_hu_1 + '</b><br/>' +
+          '(' + layer.feature.properties.hr_name + ')'
+      );
+    }
+
+    function style (e) {
+      var fillColor;
+      switch (e.feature.properties.hr_name) {
+        case 'Central Coast':     fillColor = cb_hr_name[0]; break;
+        case 'Colorado River':    fillColor = cb_hr_name[1]; break;
+        case 'North Coast':       fillColor = cb_hr_name[2]; break;
+        case 'North Lahontan':    fillColor = cb_hr_name[3]; break;
+        case 'Sacramento River':  fillColor = cb_hr_name[4]; break;
+        case 'San Francisco Bay': fillColor = cb_hr_name[5]; break;
+        case 'San Joaquin River': fillColor = cb_hr_name[6]; break;
+        case 'South Coast':       fillColor = cb_hr_name[7]; break;
+        case 'South Lahontan':    fillColor = cb_hr_name[8]; break;
+        case 'Tulare Lake':       fillColor = cb_hr_name[9]; break;
+      }
+      return { stroke: true, color: '#111', weight: 1, opacity:0.7, fill: true, fillColor: fillColor, fillOpacity: 0.5 };
+    }
+
+//      layer.on({
+//        mouseover : enterLayer,
+//        mouseout: leaveLayer
+//      });
+
   }
 
 }
