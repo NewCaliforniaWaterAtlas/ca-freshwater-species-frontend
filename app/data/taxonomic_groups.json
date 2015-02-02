@@ -1,0 +1,38 @@
+[
+  {
+    "name": "All species",
+    "count": 4769
+  },
+  {
+    "name": "Insects & other inverts",
+    "count": 3239
+  },
+  {
+    "name": "Plants",
+    "count": 826
+  },
+  {
+    "name": "Mollusks",
+    "count": 215
+  },
+  {
+    "name": "Crustaceans",
+    "count": 188
+  },
+  {
+    "name": "Fishes",
+    "count": 130
+  },
+  {
+    "name": "Birds",
+    "count": 105
+  },
+  {
+    "name": "Herps",
+    "count": 60
+  },
+  {
+    "name": "Mammals",
+    "count": 6
+  }
+]
