@@ -91,7 +91,8 @@ function initMap() {
     }
 
     console.log('make ajax request.');
-    var url = 'http://ca-features.statewater.org/hucs?f=topojson&bbox=' + current.bbox.tuple;
+//    var url = 'http://ca-features.statewater.org/hucs?f=topojson&bbox=' + current.bbox.tuple;
+    var url = 'http://localhost:5000/hucs?f=topojson&bbox=' + current.bbox.tuple;
     if (precision !== undefined) {
       url += '&p=' + precision;
     }

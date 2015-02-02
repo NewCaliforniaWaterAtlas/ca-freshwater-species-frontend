@@ -28,8 +28,8 @@
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="navbar navbar-default navbar-fixed-top">
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
               ng-click="menuCollapsed = ! menuCollapsed">
@@ -46,8 +46,8 @@
 
       <div class="btn-toolbar navbar navbar-right" role="toolbar">
         <div class="btn-group">
-          <button type="button" class="btn btn-all-species">All Species</button>
-          <button type="button" class="btn btn-all-species dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <button id="all-species" type="button" class="btn btn-sm btn-all-species">All Species</button>
+          <button type="button" class="btn btn-sm btn-all-species dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
           </button>
@@ -64,9 +64,10 @@
             </li>
           </ul>
         </div>
+
         <div class="btn-group">
-          <button id="fish" type="button" class="btn btn-fish">Fish</button>
-          <button type="button" class="btn btn-fish dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <button id="insects" type="button" class="btn btn-sm btn-insects">Insects</button>
+          <button type="button" class="btn btn-sm btn-insects dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
           </button>
@@ -83,9 +84,10 @@
             </li>
           </ul>
         </div>
+
         <div class="btn-group">
-          <button id="herps" type="button" class="btn btn-herps">Herps</button>
-          <button type="button" class="btn btn-herps dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <button id="plants" type="button" class="btn btn-sm btn-plants">Plants</button>
+          <button type="button" class="btn btn-sm btn-plants dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
           </button>
@@ -102,9 +104,10 @@
             </li>
           </ul>
         </div>
+
         <div class="btn-group">
-          <button id="plants" type="button" class="btn btn-plants">Plants</button>
-          <button type="button" class="btn btn-plants dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <button id="mollusks" type="button" class="btn btn-sm btn-mollusks">Mollusks</button>
+          <button type="button" class="btn btn-sm btn-mollusks dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
           </button>
@@ -121,9 +124,10 @@
             </li>
           </ul>
         </div>
+
         <div class="btn-group">
-          <button id="invertebrates" type="button" class="btn btn-invertebrates">Invertebrates</button>
-          <button type="button" class="btn btn-invertebrates dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <button id="crustaceans" type="button" class="btn btn-sm btn-crustaceans">Crustaceans</button>
+          <button type="button" class="btn btn-sm btn-crustaceans dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
           </button>
@@ -140,9 +144,70 @@
             </li>
           </ul>
         </div>
+
         <div class="btn-group">
-          <button id="birds" type="button" class="btn btn-birds">Birds</button>
-          <button type="button" class="btn btn-birds dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <button id="fishes" type="button" class="btn btn-sm btn-fishes">Fishes</button>
+          <button type="button" class="btn btn-sm btn-fishes dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ui-sref-active="active">
+              <a href ui-sref="about">
+                % Vulnerable
+              </a>
+            </li>
+            <li ui-sref-active="active">
+              <a href ui-sref="about">
+                % Endemic
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="btn-group">
+          <button id="birds" type="button" class="btn btn-sm btn-birds">Birds</button>
+          <button type="button" class="btn btn-sm btn-birds dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ui-sref-active="active">
+              <a href ui-sref="about">
+                % Vulnerable
+              </a>
+            </li>
+            <li ui-sref-active="active">
+              <a href ui-sref="about">
+                % Endemic
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="btn-group">
+          <button id="herps" type="button" class="btn btn-sm btn-herps">Herps</button>
+          <button type="button" class="btn btn-sm btn-herps dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ui-sref-active="active">
+              <a href ui-sref="about">
+                % Vulnerable
+              </a>
+            </li>
+            <li ui-sref-active="active">
+              <a href ui-sref="about">
+                % Endemic
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="btn-group">
+          <button id="mammals" type="button" class="btn btn-sm btn-mammals">Mammals</button>
+          <button type="button" class="btn btn-sm btn-mammals dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
           </button>
@@ -162,10 +227,10 @@
 
       </div>
     </div>
+
+    <div id="map"></div>
+
   </div>
-
-  <div id="map"></div>
-
 </div>
 
 <div class="clearfix"></div>
@@ -174,7 +239,7 @@
   <div class="container">
     <div class="footer-inner">
       <p>
-        © 2014 New California Water Atlas / The Nature Conservancy
+        © 2015 New California Water Atlas / The Nature Conservancy
       </p>
     </div>
   </div>
