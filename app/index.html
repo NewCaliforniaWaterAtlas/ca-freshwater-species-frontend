@@ -10,10 +10,14 @@
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
   <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
   <script src="bower_components/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="css/leaflet.rrose.css" />
+  <script src="js/rrose-src.js"></script>
 
-  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="bower_components/topojson/topojson.js"></script>
   <script src="js/L.TopoJSON.js"></script>
   <script src="js/main.js"></script>
   <link rel="stylesheet" href="css/app.css" />
@@ -28,7 +32,7 @@
     }
   </style>
 </head>
-<body ng-controller="TaxonomicGroupListCtrl">
+<body ng-controller="SpeciesListCtrl">
 
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="container">
@@ -45,7 +49,7 @@
       </div>
     </div>
 
-    <div class="collapse navbar-collapse" collapse="menuCollapsed">
+    <div class="collapse navbar-collapse" collapse="menuCollapsed" ng-controller="TaxonomicGroupListCtrl">
       <div class="btn-toolbar navbar navbar-right" role="toolbar">
         <div class="btn-group" ng-repeat="tg in taxonomic_groups">
           <button id="{{tg.className}}" type="button" class="btn btn-sm btn-{{tg.className}}">{{tg.name}}</button>
@@ -70,7 +74,11 @@
       </div>
     </div>
 
-    <div id="map"></div>
+    <div class="row">
+      <div class="col-md-10">
+        <div id="map"></div>
+      </div>
+    </div>
 
   </div>
 </div>

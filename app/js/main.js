@@ -1,6 +1,6 @@
 function initMap() {
   var l;
-  var map = L.map('map', { minZoom: 6, maxZoom: 15 }).setView([37.8922, -119.3335], 6);
+  var map = L.map('map', { minZoom: 6, maxZoom: 15 }).setView([37.5, -119.3], 6);
 
   L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     //  L.tileLayer('https://a.tiles.mapbox.com/v4/erictheise.k93ep0p9/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZXJpY3RoZWlzZSIsImEiOiJqanBuc3NvIn0.3n-yBu6rKZtkb19T5Bh8GQ', {
@@ -118,6 +118,13 @@ function initMap() {
 
       layer.on('mouseover mousemove', function(e) {
         layer.setStyle({ fillOpacity: 0.9 });
+        var hover_bubble = new L.Rrose({ offset: new L.Point(0, -2), closeButton: false, autoPan: false })
+          .setContent(
+            '<b>' + layer.feature.properties.first_hu_1 + '</b><br/>' +
+              '(' + layer.feature.properties.hr_name + ')'
+          )
+          .setLatLng(e.latlng)
+          .openOn(map);
       });
 
       layer.on('mouseout', function(e) {
