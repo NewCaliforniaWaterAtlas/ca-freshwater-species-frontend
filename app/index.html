@@ -35,7 +35,7 @@
 <body ng-controller="SpeciesListCtrl">
 
 <div class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
+  <div class="container" ng-controller="TaxonomicGroupListCtrl">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
               ng-click="menuCollapsed = ! menuCollapsed">
@@ -49,10 +49,10 @@
       </div>
     </div>
 
-    <div class="collapse navbar-collapse" collapse="menuCollapsed" ng-controller="TaxonomicGroupListCtrl">
+    <div class="collapse navbar-collapse" collapse="menuCollapsed">
       <div class="btn-toolbar navbar navbar-right" role="toolbar">
         <div class="btn-group" ng-repeat="tg in taxonomic_groups">
-          <button id="{{tg.className}}" type="button" class="btn btn-sm btn-{{tg.className}}">{{tg.name}}</button>
+          <button ng-click="" id="{{tg.className}}" type="button" class="btn btn-sm btn-{{tg.className}}">{{tg.name}}</button>
           <button type="button" class="btn btn-sm btn-{{tg.className}} dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="caret"></span>
             <span class="sr-only">Toggle Dropdown</span>
@@ -78,6 +78,14 @@
       <div class="col-md-10">
         <div id="map"></div>
       </div>
+
+      <div class="col-md-2">
+        <div>
+          <p>
+            species count: {{count}} {{taxonomic_groups[2].count}}
+          </p>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -98,7 +106,6 @@
 <script>
   initMap();
 </script>
-<script src="js/button.js"></script>
 
 </body>
 </html>

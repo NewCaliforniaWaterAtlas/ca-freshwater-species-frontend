@@ -11,7 +11,7 @@ var fsfApp = angular.module('fsfApp', ['LocalStorageModule'])
 
 fsfApp.controller('TaxonomicGroupListCtrl', ['$scope', '$http', 'localStorageService', function($scope, $http, localStorageService) {
   var taxonomic_groups;
-  if (localStorageService.keys().indexOf('taxonomic_groups') >= 0) {
+  if (localStorageService.keys().indexOf('taxonomic_groups') >= 50) {
     $scope.taxonomic_groups = localStorageService.get('taxonomic_groups');
   } else {
     $http.get('data/taxonomic_groups.json').success(function(data) {
@@ -23,9 +23,11 @@ fsfApp.controller('TaxonomicGroupListCtrl', ['$scope', '$http', 'localStorageSer
         taxonomic_groups[i]['className'] = taxonomic_groups[i]['name'].toLowerCase().replace(/\s/g, '-');
       }
       localStorageService.set('taxonomic_groups', taxonomic_groups);
+      console.log('post loop taxonomic groups: ', taxonomic_groups);
       $scope.taxonomic_groups = taxonomic_groups;
     })
   }
+  console.log($scope);
 
 }]);
 
